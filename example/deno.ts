@@ -12,12 +12,12 @@ const app = new Hono()
       },
       onMessage(evt, unicorn) {
         unicorn.send(evt.data)
-      }
+      },
     })
   })
 
 export { app }
 
 Deno.serve({
-  port: 3030
+  port: 3030,
 }, app.fetch)

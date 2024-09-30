@@ -7,7 +7,9 @@ Realtime connection for Hono.
 「全員が全員 WebSocket 使えると思うなよ」
 
 ## Usage
+
 To install
+
 ```shell
 deno add @xely/spaceunicorn
 bunx jsr add @xely/spaceunicorn
@@ -18,8 +20,9 @@ npx jsr add @xely/spaceunicorn
 
 ## Server
 
-If there is a Hono WebSocket adapter for runtime that you want to use, SpaceUnicorn Works.
-Deno example, 
+If there is a Hono WebSocket adapter for runtime that you want to use,
+SpaceUnicorn Works. Deno example,
+
 ```ts
 import { ConnectionStore, spaceUnicorn } from '@xely/spaceunicorn'
 import { Hono } from '@hono/hono'
@@ -35,15 +38,17 @@ const app = new Hono()
       },
       onMessage(evt, unicorn) {
         unicorn.send(evt.data)
-      }
+      },
     })
   })
 
 Deno.serve({
-  port: 3030
+  port: 3030,
 }, app.fetch)
 ```
+
 If you suddenly want to use Cloudflare workers??
+
 ```diff
 - import { upgradeWebSocket } from '@hono/hono/deno'
 + import { upgradeWebSocket } from '@hono/hono/cloudflare-workers'
@@ -60,9 +65,10 @@ const client = hc<typeof app>('http://localhost:3030')
 
 const unicorn = await connectSpaceUnicorn(client.spaceunicorn.$url()) // Tell URL
 
-unicorn.addEventListener('message', c => {
+unicorn.addEventListener('message', (c) => {
   console.log(c.data)
 })
 unicorn.send('hello world')
 ```
+
 Simple.

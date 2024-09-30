@@ -33,7 +33,7 @@ export class ConnectionStore {
       conn.ctx.close()
     }, 5000)
   }
-  add (events: UnicornEvents): string {
+  add(events: UnicornEvents): string {
     const id = crypto.randomUUID()
     const conn: PollingConnection = {
       messages: [],
@@ -45,8 +45,8 @@ export class ConnectionStore {
         },
         close: () => {
           this.close(id)
-        }
-      })
+        },
+      }),
     }
     this.#map.set(id, conn)
     events.onOpen?.(new Event('open'), conn.ctx)
@@ -58,13 +58,18 @@ export class ConnectionStore {
     if (!conn) {
       return false
     }
-    conn.events.onMessage?.(new MessageEvent('message', {
-      data
-    }), conn.ctx)
+    conn.events.onMessage?.(
+      new MessageEvent('message', {
+        data,
+      }),
+      conn.ctx,
+    )
     this.#createTimeout(id)
     return true
   }
-  pull(id: string): Promise<(string | ArrayBuffer)[]> | null | (string | ArrayBuffer)[] {
+  pull(
+    id: string,
+  ): Promise<(string | ArrayBuffer)[]> | null | (string | ArrayBuffer)[] {
     const conn = this.#map.get(id)
     if (!conn) {
       return null
@@ -76,7 +81,7 @@ export class ConnectionStore {
       return result
     }
     this.#createTimeout(id)
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       conn.onSent = () => {
         this.#createTimeout(id)
         resolve(conn.messages)
@@ -107,7 +112,10 @@ export class ConnectionStore {
  */
 export interface UnicornEvents {
   onOpen?: (event: Event, unicorn: UnicornContext) => void
-  onMessage?: (event: MessageEvent<string | ArrayBuffer>, unicorn: UnicornContext) => void
+  onMessage?: (
+    event: MessageEvent<string | ArrayBuffer>,
+    unicorn: UnicornContext,
+  ) => void
   onClose?: (event: CloseEvent, unicorn: UnicornContext) => void
   onError?: (event: Event, unicorn: UnicornContext) => void
 }
@@ -124,7 +132,9 @@ export const spaceUnicorn = async (
   upgradeWebSocket: UpgradeWebSocket,
   connectionStore: ConnectionStore,
   events: UnicornEvents,
-): Promise<Response & (TypedResponse<{ __space: 'unicorn' }> | (unknown & {}))> => {
+): Promise<
+  Response & (TypedResponse<{ __space: 'unicorn' }> | (unknown & {}))
+> => {
   if (c.req.header('Upgrade') === 'websocket') {
     // WebSocket mode
     const res = await upgradeWebSocket((_c) => {
@@ -135,7 +145,7 @@ export const spaceUnicorn = async (
         },
         close(code, reason) {
           wsCtx.close(code, reason)
-        }
+        },
       })
       return {
         onOpen(evt, ws) {
@@ -145,15 +155,15 @@ export const spaceUnicorn = async (
         async onMessage(evt, ws) {
           wsCtx = ws
           const event = new MessageEvent<string | ArrayBuffer>('message', {
-            data:
-              typeof evt.data === 'string' ?
-                evt.data:
-              evt.data instanceof ArrayBuffer ?
-                evt.data:
-              evt.data instanceof Blob ?
-                await evt.data.arrayBuffer():
-              evt.data instanceof SharedArrayBuffer ?
-                new Uint8Array(evt.data).buffer : void 0
+            data: typeof evt.data === 'string'
+              ? evt.data
+              : evt.data instanceof ArrayBuffer
+              ? evt.data
+              : evt.data instanceof Blob
+              ? await evt.data.arrayBuffer()
+              : evt.data instanceof SharedArrayBuffer
+              ? new Uint8Array(evt.data).buffer
+              : void 0,
           })
 
           events.onMessage?.(event, ctx)
@@ -184,7 +194,7 @@ export const spaceUnicorn = async (
       const connId = connectionStore.add(events)
       return c.json({
         success: true,
-        connId
+        connId,
       })
     }
     case 'POLLING': {
@@ -200,7 +210,10 @@ export const spaceUnicorn = async (
       const formData = new FormData()
       for (let i = 0; i < data.length; i++) {
         const value = data[i]
-        formData.append(i.toString(), typeof value === 'string' ? value : new Blob([value]))
+        formData.append(
+          i.toString(),
+          typeof value === 'string' ? value : new Blob([value]),
+        )
       }
       return new Response(formData)
     }
@@ -209,10 +222,13 @@ export const spaceUnicorn = async (
       if (!id) {
         return c.json({
           success: false,
-          closed: true
+          closed: true,
         }, 400)
       }
-      const data = await (c.req.header('Content-Type') === 'text/plain' ? c.req.text() : c.req.arrayBuffer())
+      const data =
+        await (c.req.header('Content-Type') === 'text/plain'
+          ? c.req.text()
+          : c.req.arrayBuffer())
       const sent = connectionStore.send(id, data)
       if (!sent) {
         return c.json('Invalid Request', 400)
