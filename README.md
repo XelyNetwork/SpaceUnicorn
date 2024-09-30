@@ -2,7 +2,7 @@
 
 Realtime connection for Hono.
 
-## Why don't use WebSocket??
+## Why do you use only WebSocket??
 
 「全員が全員 WebSocket 使えると思うなよ」
 
