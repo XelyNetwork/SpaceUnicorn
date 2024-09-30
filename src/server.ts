@@ -133,6 +133,7 @@ export const spaceUnicorn = async (
   connectionStore: ConnectionStore,
   events: UnicornEvents,
 ): Promise<
+  // deno-lint-ignore ban-types
   Response & (TypedResponse<{ __space: 'unicorn' }> | (unknown & {}))
 > => {
   if (c.req.header('Upgrade') === 'websocket') {
