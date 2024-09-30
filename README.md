@@ -53,7 +53,7 @@ If you suddenly want to use Cloudflare workers??
 
 ```ts
 import type { app } from './app'
-import { hc } from '@hono/client'
+import { hc } from 'hono/client'
 import { connectSpaceUnicorn } from '@xely/spaceunicorn/client'
 
 const client = hc<typeof app>('http://localhost:3030')
