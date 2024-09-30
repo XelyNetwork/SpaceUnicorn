@@ -1,0 +1,24 @@
+{
+  "version": "3",
+  "packages": {
+    "specifiers": {
+      "jsr:@derzade/typescript-event-target@^1.1.1": "jsr:@derzade/typescript-event-target@1.1.1",
+      "jsr:@hono/hono@^4.6.3": "jsr:@hono/hono@4.6.3"
+    },
+    "jsr": {
+      "@derzade/typescript-event-target@1.1.1": {
+        "integrity": "853c4cb91c333923534faf02fe68f2a91050dc41732a6899fb67ccee204f7dc7"
+      },
+      "@hono/hono@4.6.3": {
+        "integrity": "a1f5a18cd12a0db54755b0461dd5a4e2d93a6f85403073eb710103eacc42daf3"
+      }
+    }
+  },
+  "remote": {},
+  "workspace": {
+    "dependencies": [
+      "jsr:@derzade/typescript-event-target@^1.1.1",
+      "jsr:@hono/hono@^4.6.3"
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "@xely/spaceunicorn",
+  "version": "0.1.0",
+  "exports": {
+    ".": "./src/mod.ts",
+    "./client": "./src/client.ts"
+  },
+  "license": "MIT",
+  "imports": {
+    "@derzade/typescript-event-target": "jsr:@derzade/typescript-event-target@^1.1.1",
+    "@hono/hono": "jsr:@hono/hono@^4.6.3"
+  },
+  "fmt": {
+    "semiColons": false,
+    "singleQuote": true
+  },
+  "tasks": {
+    "dev:client": "deno run --allow-net --watch example/client.ts",
+    "dev:deno": "deno run --allow-net --watch example/deno.ts"
+  }
+}
