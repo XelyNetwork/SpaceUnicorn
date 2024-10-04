@@ -1,32 +1,37 @@
+<img align="right" src="https://emoji2svg.deno.dev/api/🦄" width="180"></img>
 # SpaceUnicorn
 
 Realtime connection for Hono.
+It's also a simple Socket.IO alternative.
+SpaceUnicorn uses WebSockets, but SpaceUnicorn works without WebSockets! SpaceUnicorn use Long Polling if users can't use WebSockets.
 
-## Why do you use only WebSocket??
-
-「全員が全員 WebSocket 使えると思うなよ」
+Some proxies in workplaces and schools blocks WebSockets. By using SpaceUnicorn, SpaceUnicorn gives these users a real-time experience. Not only an environment where WebSocket can be used!
 
 ## Usage
 
-To install
+SpaceUnicorn is published in [JSR](https://jsr.io/@xely/spaceunicorn).
+You can use SpaceUnicorn as server using some runtimes such as Deno, Bun, Cloudflare Workers, and Node.js!
+If you want to use SpaceUnicorn as a client, it works in not only browsers.
 
+To install:
 ```shell
-deno add @xely/spaceunicorn
-bunx jsr add @xely/spaceunicorn
-pnpm dlx jsr add @xely/spaceunicorn
-yarn dlx jsr add @xely/spaceunicorn
-npx jsr add @xely/spaceunicorn
+deno add @xely/spaceunicorn # Deno
+bunx jsr add @xely/spaceunicorn # Bun
+pnpm dlx jsr add @xely/spaceunicorn # pnpm
+yarn dlx jsr add @xely/spaceunicorn # yarn
+npx jsr add @xely/spaceunicorn # npm
 ```
 
 ## Server
 
+You are required to install [Hono](https://hono.dev).
 If there is a Hono WebSocket adapter for runtime that you want to use,
 SpaceUnicorn Works. Deno example,
 
 ```ts
 import { ConnectionStore, spaceUnicorn } from '@xely/spaceunicorn'
-import { Hono } from '@hono/hono'
-import { upgradeWebSocket } from '@hono/hono/deno'
+import { Hono } from 'hono'
+import { upgradeWebSocket } from 'hono/deno'
 
 const connectionStore = new ConnectionStore()
 
@@ -47,15 +52,23 @@ Deno.serve({
 }, app.fetch)
 ```
 
-If you suddenly want to use Cloudflare workers??
+If you suddenly want to use other runtimes??
 
 ```diff
 - import { upgradeWebSocket } from '@hono/hono/deno'
-+ import { upgradeWebSocket } from '@hono/hono/cloudflare-workers'
++ import { upgradeWebSocket } from 'hono/cloudflare-workers' // Cloudflare Workers
+
++ import { createBunWebSocket } from 'hono/bun'
++ const { websocket, upgradeWebSocket } = createBunWebSocket() // Bun
+
++ import { upgradeWebSocket } from '@hono/node-server' // Node.js
 ```
 
 ### Client
 
+You can use `connectSpaceUnicorn` API.
+
+Example using Hono RPC:
 ```ts
 import type { app } from './app'
 import { hc } from 'hono/client'
