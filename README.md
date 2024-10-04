@@ -1,15 +1,14 @@
 <img align="right" src="https://emoji2svg.deno.dev/api/🦄" width="180"></img>
 # SpaceUnicorn
 
-Realtime connection for Hono.
-It's also a simple Socket.IO alternative.
-SpaceUnicorn uses WebSockets, but SpaceUnicorn works without WebSockets! SpaceUnicorn use Long Polling if users can't use WebSockets.
+Realtime connection for Hono. It's also a simple Socket.IO alternative. SpaceUnicorn uses WebSockets, but SpaceUnicorn works without WebSockets! SpaceUnicorn use Long Polling if users can't use WebSockets.
 
 Some proxies in workplaces and schools blocks WebSockets. By using SpaceUnicorn, SpaceUnicorn gives these users a real-time experience. Not only an environment where WebSocket can be used!
 
 ## Usage
 
 SpaceUnicorn is published in [JSR](https://jsr.io/@xely/spaceunicorn).
+
 You can use SpaceUnicorn as server using some runtimes such as Deno, Bun, Cloudflare Workers, and Node.js!
 If you want to use SpaceUnicorn as a client, it works in not only browsers.
 
@@ -25,6 +24,7 @@ npx jsr add @xely/spaceunicorn # npm
 ## Server
 
 You are required to install [Hono](https://hono.dev).
+
 If there is a Hono WebSocket adapter for runtime that you want to use,
 SpaceUnicorn Works. Deno example,
 
